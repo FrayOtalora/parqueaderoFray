@@ -1,4 +1,6 @@
-package co.ceiba.parqueaderoRest.repositoryImpl;
+package co.ceiba.parqueaderoRest.serviceImpl;
+
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
@@ -11,7 +13,17 @@ public class ParqueaderoServiceImpl implements ParqueaderoService {
 
 	@Override
 	public boolean ingresarAuto(Auto auto) throws Exception {
-		// TODO Auto-generated method stub
+		
+		LocalDateTime ingreso= LocalDateTime.now();
+		LocalDateTime salida= LocalDateTime.now().plusHours(7);
+		
+		if(ingreso.getHour()-salida.getHour()>5) 
+		System.out.println("La hora de entrada fue: "+ ingreso.getHour()+":"+ingreso.getMinute()+ "hora de salida: "+salida.getHour()+":"+salida.getMinute());
+		
+		else {
+			System.out.println("es mayor a 5 horas");
+		}
+		
 		return true;
 	}
 

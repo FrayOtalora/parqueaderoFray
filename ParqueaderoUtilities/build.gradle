@@ -4,7 +4,6 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
-        
     }
 }
 
@@ -37,11 +36,6 @@ dependencies {
     // end::actuator[]
     testCompile("junit:junit")
     
-       compile("com.fasterxml.jackson.core:jackson-databind")
-    
    compile 'mysql:mysql-connector-java'
-   
-      compile project(":ParqueaderoUtilities")
-
     
 }
