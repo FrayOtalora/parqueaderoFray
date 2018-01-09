@@ -1,52 +1,54 @@
 package co.ceiba.parqueaderoRest.serviceImpl;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import co.ceiba.parqueaderoRest.dominio.Auto;
-import co.ceiba.parqueaderoRest.dominio.Moto;
+import co.ceiba.parqueaderoRest.repository.ParqueaderoRepository;
 import co.ceiba.parqueaderoRest.service.ParqueaderoService;
+import co.ceiba.parqueaderoRest.dominio.Parking;
+import co.ceiba.parqueaderoRest.dominio.Vehiculo;
 
 @Service
 public class ParqueaderoServiceImpl implements ParqueaderoService {
 
+	@Autowired
+	ParqueaderoRepository parqueaderoRepository;
+	
 	@Override
-	public boolean ingresarAuto(Auto auto) throws Exception {
+	public boolean ingresarVehiculo(Parking parking) throws Exception {
+
+		try {
+		return parqueaderoRepository.ingresarAuto(parking);
 		
-		LocalDateTime ingreso= LocalDateTime.now();
-		LocalDateTime salida= LocalDateTime.now().plusHours(7);
-		
-		if(ingreso.getHour()-salida.getHour()>5) 
-		System.out.println("La hora de entrada fue: "+ ingreso.getHour()+":"+ingreso.getMinute()+ "hora de salida: "+salida.getHour()+":"+salida.getMinute());
-		
-		else {
-			System.out.println("es mayor a 5 horas");
+		}catch(Exception e) {
+			System.out.println("Error al guardar en base de datos");
+			return false;
 		}
 		
-		return true;
+		
 	}
 
+
+
 	@Override
-	public boolean ingresarMoto(Moto moto) throws Exception {
-
-		if (moto.getCilindraje() > 500) {
-			return true;
-		}
-
+	public boolean registrarPagoVehiculo(Parking parking) throws Exception {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
-	public boolean retirarAuto(Auto auto) throws Exception {
-		// TODO Auto-generated method stub
-		return true;
-	}
+
 
 	@Override
-	public boolean retirarMoto(Moto moto) throws Exception {
-		// TODO Auto-generated method stub
-		return true;
+	public Parking retirarVehiculo(Vehiculo vehiculo) throws Exception {
+		Parking park=new Parking(vehiculo,new Date());
+		park.setFechaRetiro(new Date());
+		
+		return park;
 	}
+
+
+
 
 }

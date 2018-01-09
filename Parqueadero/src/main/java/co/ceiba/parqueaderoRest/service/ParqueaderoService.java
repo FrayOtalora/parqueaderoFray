@@ -1,18 +1,16 @@
 package co.ceiba.parqueaderoRest.service;
 
 
-import co.ceiba.parqueaderoRest.dominio.Auto;
-import co.ceiba.parqueaderoRest.dominio.Moto;
+import co.ceiba.parqueaderoRest.dominio.Parking;
+import co.ceiba.parqueaderoRest.dominio.Vehiculo;
 
 
 public interface ParqueaderoService {
 
-	boolean ingresarAuto(Auto auto) throws Exception;
+	boolean ingresarVehiculo(Parking parking) throws Exception;
 
-	boolean ingresarMoto(Moto moto) throws Exception;
+	Parking retirarVehiculo(Vehiculo vehiculo) throws Exception;
 	
-	boolean retirarAuto(Auto auto) throws Exception;
-	
-	boolean retirarMoto(Moto moto) throws Exception;
+	boolean registrarPagoVehiculo(Parking parking) throws Exception;
 	
 }
