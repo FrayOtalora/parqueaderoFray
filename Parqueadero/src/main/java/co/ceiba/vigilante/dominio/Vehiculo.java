@@ -15,6 +15,12 @@ public class Vehiculo {
 		this.tipo = tipo;
 	}
 
+	public Vehiculo(String placa, int tipo, int cilindraje) {
+		this.placa = placa;
+		this.tipo = tipo;
+		this.cilindraje=cilindraje;
+	}
+	
 	public String getPlaca() {
 		return placa;
 	}

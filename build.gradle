@@ -1,7 +1,10 @@
-// Define an extra property
-ext.srcDirName = 'src/main/java'
+allprojects {
 
-// Define a method
-def getSrcDir(project) {
-    return project.file(srcDirName)
+	repositories {
+		mavenCentral()		
+	}
+	
+	project.ext.junit = ['junit:junit:4.12']  	
+	project.ext.mockito = ['org.mockito:mockito-all:1.10.19']
+	project.ext.log4j = ['log4j:log4j:1.2.17']
 }
