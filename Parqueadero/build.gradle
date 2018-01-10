@@ -41,7 +41,7 @@ dependencies {
     
    compile 'mysql:mysql-connector-java'
    
-      compile project(":ParqueaderoUtilities")
+      
 
     
 }
