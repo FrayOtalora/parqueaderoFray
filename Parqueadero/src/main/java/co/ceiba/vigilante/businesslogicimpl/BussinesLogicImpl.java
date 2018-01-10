@@ -123,9 +123,9 @@ public class BussinesLogicImpl implements BusinessLogic {
 			return (p.getProperty(nombre));
 
 		} catch (Exception e) {
-			System.out.println("Excepcion: " + e.getMessage());
+			throw new VigilanteExcepcion("Excepcion al obtener el archivo properties. "+e.getMessage());
 		}
-		return null;
+
 	}
 
 	@Override
