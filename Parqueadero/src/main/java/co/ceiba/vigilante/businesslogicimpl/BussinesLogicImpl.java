@@ -137,7 +137,7 @@ public class BussinesLogicImpl implements BusinessLogic {
 			p.store(new FileOutputStream("parqueadero.properties"), null);
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new VigilanteExcepcion("Excepcion al actualizar el archivo properties. "+e.getMessage());
 		}
 
 	}
