@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import co.ceiba.vigilante.businesslogic.BusinessLogic;
 import co.ceiba.vigilante.dominio.Parking;
 import co.ceiba.vigilante.dominio.Vehiculo;
+import co.ceiba.vigilante.excepcion.VigilanteExcepcion;
 import co.ceiba.vigilante.repository.VigilanteRepository;
 import co.ceiba.vigilante.service.VigilanteService;
 
@@ -21,7 +22,7 @@ public class VigilanteServiceImpl implements VigilanteService {
 	BusinessLogic businessLogic;
 
 	@Override
-	public void ingresarVehiculo(Vehiculo vehiculo) throws Exception {
+	public void ingresarVehiculo(Vehiculo vehiculo) {
 		try {
 
 			String nombreProperties = (vehiculo.getTipo() == 0) ? "autos" : "motos";
@@ -36,7 +37,6 @@ public class VigilanteServiceImpl implements VigilanteService {
 
 			businessLogic.actualizarPropertiesByName(nombreProperties, String.valueOf(++cantidadVehiculos));
 
-			
 		} catch (Exception e) {
 			System.out.println("Error al guardar en base de datos");
 
@@ -45,22 +45,27 @@ public class VigilanteServiceImpl implements VigilanteService {
 	}
 
 	@Override
-	public void registrarPagoVehiculo(Parking parking) throws Exception {
+	public void registrarPagoVehiculo(Parking parking) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public Parking retirarVehiculo(Vehiculo vehiculo) {
+	public Parking retirarVehiculo(String placa) {
 
 		try {
 			Parking park = new Parking();
-			park.setVehiculo(vehiculo);
-			vigilanteRepository.retirarVehiculo(vehiculo.getPlaca());
+			park.setVehiculo(new Vehiculo());
+			park=vigilanteRepository.retirarVehiculo(placa);
 			park.setFechaRetiro(new Date());
+
+//			park.setValorPago(businessLogic.obtenerValorPagar(
+//					businessLogic.obtenerDiferenciaHoras(park.getFechaIngreso(), park.getFechaRetiro()),
+//					park.getVehiculo().getTipo(), park.getVehiculo().getCilindraje()));
+			
 			return park;
 
 		} catch (Exception e) {
-			throw new RuntimeException("Error al guardar en base de datos" + e.getMessage());
+			throw new VigilanteExcepcion("Error al guardar en base de datos" + e.getMessage());
 		}
 
 	}

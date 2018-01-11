@@ -18,6 +18,8 @@ import co.ceiba.vigilante.repository.VigilanteRepository;
 @Service
 public class BussinesLogicImpl implements BusinessLogic {
 
+	static final String PARQUEADERO_PROPERTIES="parqueadero.properties";
+	
 	@Autowired
 	VigilanteRepository vigilanteRepository;
 
@@ -30,22 +32,21 @@ public class BussinesLogicImpl implements BusinessLogic {
 				String[] letras = vigilanteRepository.obtenerConfisysByName("restriccionPlaca").split("-");
 				if (letras.length > 0) {
 					for (String ss : letras) {
-						if (placa.charAt(0) == ss.charAt(0) && ("WEDNESDAY".equals(fecha.getDayOfWeek().name())
+						if (placa.charAt(0) == ss.charAt(0) && ("THURSDAY".equals(fecha.getDayOfWeek().name())
 								|| "SUNDAY".equals(fecha.getDayOfWeek().name())))
 							return true;
-						
+
 						else {
 							return false;
 						}
 					}
 				}
 			}
-			
-		
+
 			throw new VigilanteExcepcion("La placa llego vacia");
-			
+
 		} catch (RuntimeException e) {
-			throw new VigilanteExcepcion("Se genero un eror en el metodo restriccionIngreso. "+e.getMessage());
+			throw new VigilanteExcepcion("Se genero un eror en el metodo restriccionIngreso. " + e.getMessage());
 		}
 
 	}
@@ -118,12 +119,20 @@ public class BussinesLogicImpl implements BusinessLogic {
 	@Override
 	public String obtenerPropertiesByName(String nombre) {
 		try {
-			Properties p = new Properties();
-			p.load(new FileInputStream("parqueadero.properties"));
-			return (p.getProperty(nombre));
+			if (!nombre.isEmpty()) {
+				Properties p = new Properties();
+				p.load(new FileInputStream(PARQUEADERO_PROPERTIES));
+				if (!p.getProperty(nombre).isEmpty())
+					return p.getProperty(nombre);
+				else {
+					throw new VigilanteExcepcion("La porpiedad no existe.");
+				}
+			}
+
+			throw new VigilanteExcepcion("Excepcion: El nombre de la propiedad viene vacio.");
 
 		} catch (Exception e) {
-			throw new VigilanteExcepcion("Excepcion al obtener el archivo properties. "+e.getMessage());
+			throw new VigilanteExcepcion("Excepcion al obtener el archivo properties. " + e.getMessage());
 		}
 
 	}
@@ -132,12 +141,17 @@ public class BussinesLogicImpl implements BusinessLogic {
 	public void actualizarPropertiesByName(String nombre, String valor) {
 		Properties p = new Properties();
 		try {
-			p.load(new FileInputStream("parqueadero.properties"));
-			p.setProperty(nombre, valor);
-			p.store(new FileOutputStream("parqueadero.properties"), null);
+			if (!nombre.isEmpty()&& !valor.isEmpty()) {
+				p.load(new FileInputStream(PARQUEADERO_PROPERTIES));
+				p.setProperty(nombre, valor);
+				p.store(new FileOutputStream(PARQUEADERO_PROPERTIES), "modificacion archivo para propiedad: "+nombre);
+				return;
+			}
+
+			throw new VigilanteExcepcion("Excepcion: El nombre o valor de la propiedad viene vacio.");
 
 		} catch (IOException e) {
-			throw new VigilanteExcepcion("Excepcion al actualizar el archivo properties. "+e.getMessage());
+			throw new VigilanteExcepcion("Excepcion al actualizar el archivo properties. " + e.getMessage());
 		}
 
 	}

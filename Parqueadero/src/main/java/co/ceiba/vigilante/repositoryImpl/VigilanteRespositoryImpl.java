@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import co.ceiba.vigilante.component.ConexionMysql;
 import co.ceiba.vigilante.dominio.Parking;
+import co.ceiba.vigilante.excepcion.VigilanteExcepcion;
 import co.ceiba.vigilante.repository.VigilanteRepository;
 
 @Repository
@@ -42,7 +43,8 @@ public class VigilanteRespositoryImpl implements VigilanteRepository {
 	public Parking retirarVehiculo(String placa) {
 		try {
 
-			String sql = "SELECT p.* FROM parking p WHERE p.placa='" + placa + "'";
+			Parking parking=new Parking();
+			String sql = "SELECT p.* FROM parking p WHERE p.placa='" + placa + "' and p.fechaSalida IS NULL";
 
 			ConexionMysql.conectar();
 
@@ -51,14 +53,18 @@ public class VigilanteRespositoryImpl implements VigilanteRepository {
 			ConexionMysql.desconectar();
 
 			if (!res.isEmpty()) {
+				System.out.println("info de bd: "+ res.get(0).toString());
 				String[] park = res.get(0).split("&");
-				// parking.setId(Integer.parseInt(park[0]));
-				// parking.setFechaIngreso(java.sql.Timestamp.valueOf(park[3]));
+				
+				
+				parking.setId(Integer.parseInt(park[0]));
+				parking.setFechaIngreso(java.sql.Timestamp.valueOf(park[3]));
+				return parking;
 			}
 
-			return null;
+			return parking;
 		} catch (Exception e) {
-			throw new RuntimeException("Error al ejecutar script select into parking. Excepcion: " + e.getMessage());
+			throw new VigilanteExcepcion("Error al ejecutar script select into parking. Excepcion: " + e.getMessage());
 
 		}
 	}
@@ -71,7 +77,7 @@ public class VigilanteRespositoryImpl implements VigilanteRepository {
 
 	@Override
 	public String obtenerConfisysByName(String nombre) {
-		
+
 		return "A";
 	}
 

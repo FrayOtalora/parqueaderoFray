@@ -29,8 +29,8 @@ public class VigilanteController {
 	}
 
 	@RequestMapping(value = "/retirarVehiculo", method = RequestMethod.POST)
-	public Parking retirarVehiculo(@RequestBody Vehiculo vehiculo){
-return null;
+	public Parking retirarVehiculo(@RequestBody String placa){ 
+		return VigilanteService.retirarVehiculo(placa); 
 	}
 
 	@RequestMapping(value = "/registrarPagoVehiculo", method = RequestMethod.POST)

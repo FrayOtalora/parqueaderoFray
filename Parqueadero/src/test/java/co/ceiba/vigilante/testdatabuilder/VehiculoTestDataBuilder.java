@@ -8,7 +8,7 @@ public class VehiculoTestDataBuilder {
 	private int tipo;
 	private int cilindraje;
 	
-	public VehiculoTestDataBuilder(String placa, int tipo, int cilindraje) {
+	public VehiculoTestDataBuilder() {
 		super();
 		this.placa = "R12525";
 		this.tipo = 0;

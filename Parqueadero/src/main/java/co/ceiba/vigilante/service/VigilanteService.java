@@ -7,10 +7,10 @@ import co.ceiba.vigilante.dominio.Vehiculo;
 
 public interface VigilanteService {
 
-	void ingresarVehiculo(Vehiculo vehiculo) throws Exception;
+	void ingresarVehiculo(Vehiculo vehiculo);
 
-	Parking retirarVehiculo(Vehiculo vehiculo) throws Exception;
+	Parking retirarVehiculo(String placa);
 	
-	void registrarPagoVehiculo(Parking parking) throws Exception;
+	void registrarPagoVehiculo(Parking parking);
 	
 }
