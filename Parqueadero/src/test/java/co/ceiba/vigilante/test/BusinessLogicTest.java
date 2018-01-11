@@ -1,4 +1,4 @@
-package co.ceiba.vigilante.businesslogic.test;
+package co.ceiba.vigilante.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -236,6 +236,11 @@ public class BusinessLogicTest {
 	@Test
 	public void actualizarPropertiesByNameOKValorOK() {
 		businessLogic.actualizarPropertiesByName(MOTOS, "7" );
+	}
+	
+	@Test (expected = VigilanteExcepcion.class)
+	public void actualizarPropertiesByNameNoexisteValorOK() {
+		businessLogic.actualizarPropertiesByName("xxxx", "7" );
 	}
 	
 	

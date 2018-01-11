@@ -28,7 +28,6 @@ public class VigilanteServiceImpl implements VigilanteService {
 			String nombreProperties = (vehiculo.getTipo() == 0) ? "autos" : "motos";
 
 			int cantidadVehiculos = Integer.parseInt(businessLogic.obtenerPropertiesByName(nombreProperties));
-			System.out.println("Cantidad de vehiculos " + cantidadVehiculos);
 
 			if (cantidadVehiculos < businessLogic.cantidadLimiteVehiculos(vehiculo.getTipo())
 					&& !businessLogic.restriccionIngreso(vehiculo.getPlaca()))
@@ -38,7 +37,7 @@ public class VigilanteServiceImpl implements VigilanteService {
 			businessLogic.actualizarPropertiesByName(nombreProperties, String.valueOf(++cantidadVehiculos));
 
 		} catch (Exception e) {
-			System.out.println("Error al guardar en base de datos");
+			throw new VigilanteExcepcion("Error al ingresar el vehiculo " + e.getMessage());
 
 		}
 
@@ -53,15 +52,13 @@ public class VigilanteServiceImpl implements VigilanteService {
 	public Parking retirarVehiculo(String placa) {
 
 		try {
-			Parking park = new Parking();
-			park.setVehiculo(new Vehiculo());
-			park=vigilanteRepository.retirarVehiculo(placa);
+			Parking park;
+			park = vigilanteRepository.retirarVehiculo(placa);
 			park.setFechaRetiro(new Date());
+			park.setValorPago(businessLogic.obtenerValorPagar(
+					businessLogic.obtenerDiferenciaHoras(park.getFechaIngreso(), park.getFechaRetiro()),
+					park.getVehiculo().getTipo(), park.getVehiculo().getCilindraje()));
 
-//			park.setValorPago(businessLogic.obtenerValorPagar(
-//					businessLogic.obtenerDiferenciaHoras(park.getFechaIngreso(), park.getFechaRetiro()),
-//					park.getVehiculo().getTipo(), park.getVehiculo().getCilindraje()));
-			
 			return park;
 
 		} catch (Exception e) {

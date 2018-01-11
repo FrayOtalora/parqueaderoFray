@@ -122,10 +122,10 @@ public class BussinesLogicImpl implements BusinessLogic {
 			if (!nombre.isEmpty()) {
 				Properties p = new Properties();
 				p.load(new FileInputStream(PARQUEADERO_PROPERTIES));
-				if (!p.getProperty(nombre).isEmpty())
+				if (p.getProperty(nombre)!=null)
 					return p.getProperty(nombre);
 				else {
-					throw new VigilanteExcepcion("La porpiedad no existe.");
+					throw new VigilanteExcepcion("La propiedad no existe.");
 				}
 			}
 
@@ -143,9 +143,14 @@ public class BussinesLogicImpl implements BusinessLogic {
 		try {
 			if (!nombre.isEmpty()&& !valor.isEmpty()) {
 				p.load(new FileInputStream(PARQUEADERO_PROPERTIES));
+				if(p.getProperty(nombre)!=null) {
 				p.setProperty(nombre, valor);
 				p.store(new FileOutputStream(PARQUEADERO_PROPERTIES), "modificacion archivo para propiedad: "+nombre);
 				return;
+				}
+				else {
+					throw new VigilanteExcepcion("La propiedad no existe.");
+				}
 			}
 
 			throw new VigilanteExcepcion("Excepcion: El nombre o valor de la propiedad viene vacio.");

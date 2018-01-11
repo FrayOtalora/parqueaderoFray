@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import co.ceiba.vigilante.component.ConexionMysql;
 import co.ceiba.vigilante.dominio.Parking;
+import co.ceiba.vigilante.dominio.Vehiculo;
 import co.ceiba.vigilante.excepcion.VigilanteExcepcion;
 import co.ceiba.vigilante.repository.VigilanteRepository;
 
@@ -44,7 +45,7 @@ public class VigilanteRespositoryImpl implements VigilanteRepository {
 		try {
 
 			Parking parking=new Parking();
-			String sql = "SELECT p.* FROM parking p WHERE p.placa='" + placa + "' and p.fechaSalida IS NULL";
+			String sql = "SELECT p.* FROM parking p WHERE p.placa='"+placa+"' and p.fechaSalida IS NULL";
 
 			ConexionMysql.conectar();
 
@@ -53,12 +54,15 @@ public class VigilanteRespositoryImpl implements VigilanteRepository {
 			ConexionMysql.desconectar();
 
 			if (!res.isEmpty()) {
-				System.out.println("info de bd: "+ res.get(0).toString());
 				String[] park = res.get(0).split("&");
-				
+				Vehiculo v=new Vehiculo();
 				
 				parking.setId(Integer.parseInt(park[0]));
+				v.setPlaca(placa);
+				v.setTipo(Integer.parseInt(park[2]));
+				v.setCilindraje(Integer.parseInt(park[6]));
 				parking.setFechaIngreso(java.sql.Timestamp.valueOf(park[3]));
+				parking.setVehiculo(v);
 				return parking;
 			}
 
