@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import co.ceiba.vigilante.businesslogic.BusinessLogic;
 import co.ceiba.vigilante.dominio.Parking;
-import co.ceiba.vigilante.dominio.Vehiculo;
 import co.ceiba.vigilante.excepcion.VigilanteExcepcion;
 import co.ceiba.vigilante.repository.VigilanteRepository;
 import co.ceiba.vigilante.service.VigilanteService;
@@ -22,19 +21,25 @@ public class VigilanteServiceImpl implements VigilanteService {
 	BusinessLogic businessLogic;
 
 	@Override
-	public void ingresarVehiculo(Vehiculo vehiculo) {
+	public void ingresarVehiculo(Parking parking) {
 		try {
 
-			String nombreProperties = (vehiculo.getTipo() == 0) ? "autos" : "motos";
+			if(parking==null)
+				throw new VigilanteExcepcion("El objeto ingresa vacio");
+			
+			String nombreProperties = (parking.getTipoVehiculo() == 0) ? "autos" : "motos";
 
 			int cantidadVehiculos = Integer.parseInt(businessLogic.obtenerPropertiesByName(nombreProperties));
 
-			if (cantidadVehiculos < businessLogic.cantidadLimiteVehiculos(vehiculo.getTipo())
-					&& !businessLogic.restriccionIngreso(vehiculo.getPlaca()))
-				vigilanteRepository.ingresarVehiculo(vehiculo.getPlaca(), new Date(), vehiculo.getTipo(),
-						vehiculo.getCilindraje());
+			if (cantidadVehiculos < businessLogic.cantidadLimiteVehiculos(parking.getTipoVehiculo())
+					&& !businessLogic.restriccionIngreso(parking.getPlaca())) {
 
-			businessLogic.actualizarPropertiesByName(nombreProperties, String.valueOf(++cantidadVehiculos));
+				parking.setFechaIngreso(new Date());
+
+				vigilanteRepository.save(parking);
+
+				businessLogic.actualizarPropertiesByName(nombreProperties, String.valueOf(++cantidadVehiculos));
+			}
 
 		} catch (Exception e) {
 			throw new VigilanteExcepcion("Error al ingresar el vehiculo " + e.getMessage());
@@ -52,12 +57,15 @@ public class VigilanteServiceImpl implements VigilanteService {
 	public Parking retirarVehiculo(String placa) {
 
 		try {
-			Parking park;
-			park = vigilanteRepository.retirarVehiculo(placa);
-			park.setFechaRetiro(new Date());
+			Parking park = vigilanteRepository.findByPlacaAndFechaSalida(placa);
+
+			if (park == null)
+				throw new VigilanteExcepcion("El objeto retornado de base de datos es vacio");
+
+			park.setFechaSalida(new Date());
 			park.setValorPago(businessLogic.obtenerValorPagar(
-					businessLogic.obtenerDiferenciaHoras(park.getFechaIngreso(), park.getFechaRetiro()),
-					park.getVehiculo().getTipo(), park.getVehiculo().getCilindraje()));
+					businessLogic.obtenerDiferenciaHoras(park.getFechaIngreso(), park.getFechaSalida()),
+					park.getTipoVehiculo(), park.getCilindraje()));
 
 			return park;
 

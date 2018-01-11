@@ -1,17 +1,15 @@
 package co.ceiba.vigilante.repository;
 
-import java.util.Date;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 
 import co.ceiba.vigilante.dominio.Parking;
 
-public interface VigilanteRepository {
+public interface VigilanteRepository extends CrudRepository<Parking, Long>{
 
-	boolean ingresarVehiculo(String placa, Date fechaIngreso, int tipoVehiculo, int cilindraje);
 
-	Parking retirarVehiculo(String placa);
+	@Query("select p from parking p where p.placa=?1 and p.fechaSalida IS NULL")
+	Parking findByPlacaAndFechaSalida(String placa);
 
-	boolean registrarPagoVehiculo(int id);
-	
-	String obtenerConfisysByName(String nombre);
 	
 }

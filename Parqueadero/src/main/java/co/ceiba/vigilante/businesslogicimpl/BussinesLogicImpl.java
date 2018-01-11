@@ -13,23 +13,23 @@ import org.springframework.stereotype.Service;
 
 import co.ceiba.vigilante.businesslogic.BusinessLogic;
 import co.ceiba.vigilante.excepcion.VigilanteExcepcion;
-import co.ceiba.vigilante.repository.VigilanteRepository;
+import co.ceiba.vigilante.repository.ConfisysRepository;
 
 @Service
 public class BussinesLogicImpl implements BusinessLogic {
 
-	static final String PARQUEADERO_PROPERTIES="parqueadero.properties";
-	
-	@Autowired
-	VigilanteRepository vigilanteRepository;
+	static final String PARQUEADERO_PROPERTIES = "parqueadero.properties";
 
+	@Autowired
+	ConfisysRepository confisysRepository;
+	
 	@Override
 	public boolean restriccionIngreso(String placa) {
 
 		try {
 			if (!placa.isEmpty()) {
 				LocalDateTime fecha = LocalDateTime.now();
-				String[] letras = vigilanteRepository.obtenerConfisysByName("restriccionPlaca").split("-");
+				String[] letras = "A".split("-");
 				if (letras.length > 0) {
 					for (String ss : letras) {
 						if (placa.charAt(0) == ss.charAt(0) && ("THURSDAY".equals(fecha.getDayOfWeek().name())
@@ -112,8 +112,13 @@ public class BussinesLogicImpl implements BusinessLogic {
 
 	@Override
 	public int cantidadLimiteVehiculos(int tipoVehiculo) {
-
-		return 20;
+		String descripcion="";
+		if(tipoVehiculo==0)descripcion="autos";
+		else {
+			descripcion="motos";
+		}
+		
+		return Integer.parseInt(confisysRepository.findByDescripcion(descripcion).getValor());
 	}
 
 	@Override
@@ -122,7 +127,7 @@ public class BussinesLogicImpl implements BusinessLogic {
 			if (!nombre.isEmpty()) {
 				Properties p = new Properties();
 				p.load(new FileInputStream(PARQUEADERO_PROPERTIES));
-				if (p.getProperty(nombre)!=null)
+				if (p.getProperty(nombre) != null)
 					return p.getProperty(nombre);
 				else {
 					throw new VigilanteExcepcion("La propiedad no existe.");
@@ -141,14 +146,14 @@ public class BussinesLogicImpl implements BusinessLogic {
 	public void actualizarPropertiesByName(String nombre, String valor) {
 		Properties p = new Properties();
 		try {
-			if (!nombre.isEmpty()&& !valor.isEmpty()) {
+			if (!nombre.isEmpty() && !valor.isEmpty()) {
 				p.load(new FileInputStream(PARQUEADERO_PROPERTIES));
-				if(p.getProperty(nombre)!=null) {
-				p.setProperty(nombre, valor);
-				p.store(new FileOutputStream(PARQUEADERO_PROPERTIES), "modificacion archivo para propiedad: "+nombre);
-				return;
-				}
-				else {
+				if (p.getProperty(nombre) != null) {
+					p.setProperty(nombre, valor);
+					p.store(new FileOutputStream(PARQUEADERO_PROPERTIES),
+							"modificacion archivo para propiedad: " + nombre);
+					return;
+				} else {
 					throw new VigilanteExcepcion("La propiedad no existe.");
 				}
 			}

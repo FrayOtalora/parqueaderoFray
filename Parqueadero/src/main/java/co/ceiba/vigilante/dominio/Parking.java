@@ -3,36 +3,54 @@ package co.ceiba.vigilante.dominio;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Entity(name="parking")
+@Table(name="parking")
 public class Parking implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 615979173739091224L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
-	private Vehiculo vehiculo;
+	private String placa;
+	private int tipoVehiculo;
+	private int cilindraje;
 	private Date fechaIngreso;
-	private Date fechaRetiro;
+	private Date fechaSalida;
 	private float valorPago;
 
 	public Parking() {
 
 	}
+	
+	public Parking(String placa, int tipoVehiculoVehiculo, int cilindraje) {
+		this.placa=placa;
+		this.tipoVehiculo=tipoVehiculoVehiculo;
+		this.cilindraje=cilindraje;
+	}
 
-	public Parking(int id, Vehiculo vehiculo, Date fechaIngreso, Date fechaRetiro, float valorPago) {
+	public Parking(int id, String placa, int tipoVehiculoVehiculo, int cilindraje, Date fechaIngreso, Date fechaSalida, float valorPago) {
 		super();
 		this.id = id;
-		this.vehiculo = vehiculo;
+		this.placa=placa;
+		this.tipoVehiculo=tipoVehiculoVehiculo;
+		this.cilindraje=cilindraje;
 		this.fechaIngreso = fechaIngreso;
-		this.fechaRetiro = fechaRetiro;
+		this.fechaSalida = fechaSalida;
 		this.valorPago = valorPago;
 	}
 
-	public Parking(Vehiculo vehiculo, Date fechaIngreso) {
-		super();
-		this.vehiculo = vehiculo;
-		this.fechaIngreso = fechaIngreso;
-	}
+
 
 	public int getId() {
 		return id;
@@ -42,14 +60,9 @@ public class Parking implements Serializable {
 		this.id = id;
 	}
 
-	public Vehiculo getVehiculo() {
-		return vehiculo;
-	}
+	
 
-	public void setVehiculo(Vehiculo vehiculo) {
-		this.vehiculo = vehiculo;
-	}
-
+	
 	public Date getFechaIngreso() {
 		return fechaIngreso;
 	}
@@ -58,12 +71,12 @@ public class Parking implements Serializable {
 		this.fechaIngreso = fechaIngreso;
 	}
 
-	public Date getFechaRetiro() {
-		return fechaRetiro;
+	public Date getFechaSalida() {
+		return fechaSalida;
 	}
 
-	public void setFechaRetiro(Date fechaRetiro) {
-		this.fechaRetiro = fechaRetiro;
+	public void setFechaSalida(Date fechaSalida) {
+		this.fechaSalida = fechaSalida;
 	}
 
 	public float getValorPago() {
@@ -74,11 +87,39 @@ public class Parking implements Serializable {
 		this.valorPago = valorPago;
 	}
 
+	
+	
+	public String getPlaca() {
+		return placa;
+	}
+
+	public void setPlaca(String placa) {
+		this.placa = placa;
+	}
+
+	public int getTipoVehiculo() {
+		return tipoVehiculo;
+	}
+
+	public void setTipoVehiculo(int tipoVehiculo) {
+		this.tipoVehiculo = tipoVehiculo;
+	}
+
+	public int getCilindraje() {
+		return cilindraje;
+	}
+
+	public void setCilindraje(int cilindraje) {
+		this.cilindraje = cilindraje;
+	}
+
 	@Override
 	public String toString() {
-
-		return "Parking [id=" + id + ", vehiculo=" + vehiculo + ", fechaIngreso=" + fechaIngreso + ", fechaRetiro="
-				+ fechaRetiro + ", valorPago=" + valorPago + "]";
+		return "Parking [id=" + id + ", placa=" + placa + ", tipoVehiculo=" + tipoVehiculo + ", cilindraje="
+				+ cilindraje + ", fechaIngreso=" + fechaIngreso + ", fechaSalida=" + fechaSalida + ", valorPago="
+				+ valorPago + "]";
 	}
+
+
 
 }
