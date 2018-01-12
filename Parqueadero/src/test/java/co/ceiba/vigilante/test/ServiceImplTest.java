@@ -48,16 +48,15 @@ public class ServiceImplTest {
 	@Test
 	public void inicia() {
 		
-		
+		vigilanteRepository.deleteAll();
+		confisysRepository.deleteAll();
 		confisys = new Confisys("motos", "10");
-		if(confisysRepository.findByDescripcion(confisys.getDescripcion())==null) 
 			confisysRepository.save(confisys);
 		confisys = new Confisys("autos", "20");
-		if(confisysRepository.findByDescripcion(confisys.getDescripcion())==null) 
 			confisysRepository.save(confisys);		
 		confisys = new Confisys("restriccionPlaca", "A");
-		if(confisysRepository.findByDescripcion(confisys.getDescripcion())==null) 
 			confisysRepository.save(confisys);
+			
 		vigilanteRepository.save(parkingRetiro);
 		vigilanteRepository.save(parkingPago);
 
