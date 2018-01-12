@@ -40,7 +40,6 @@ public class Parking implements Serializable {
 	}
 
 	public Parking(int id, String placa, int tipoVehiculo, int cilindraje, Date fechaIngreso, Date fechaSalida, float valorPago) {
-		super();
 		this.id = id;
 		this.placa=placa;
 		this.tipoVehiculo=tipoVehiculo;
@@ -49,6 +48,8 @@ public class Parking implements Serializable {
 		this.fechaSalida = fechaSalida;
 		this.valorPago = valorPago;
 	}
+	
+
 
 
 

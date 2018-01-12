@@ -11,28 +11,29 @@ import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import co.ceiba.vigilante.businesslogic.BusinessLogic;
+import co.ceiba.vigilante.businesslogic.VigilanteLogic;
 import co.ceiba.vigilante.excepcion.VigilanteExcepcion;
 import co.ceiba.vigilante.repository.ConfisysRepository;
 
 @Service
-public class BussinesLogicImpl implements BusinessLogic {
+public class VigilanteLogicImpl implements VigilanteLogic {
 
 	static final String PARQUEADERO_PROPERTIES = "parqueadero.properties";
+	static final String RESTRICCION_PLACA="restriccionPlaca";
 
 	@Autowired
 	ConfisysRepository confisysRepository;
-	
+
 	@Override
 	public boolean restriccionIngreso(String placa) {
 
 		try {
 			if (!placa.isEmpty()) {
 				LocalDateTime fecha = LocalDateTime.now();
-				String[] letras = "A".split("-");
+				String[] letras = this.obtenerConfisysRestriccionPlaca().split("-");
 				if (letras.length > 0) {
 					for (String ss : letras) {
-						if (placa.charAt(0) == ss.charAt(0) && ("THURSDAY".equals(fecha.getDayOfWeek().name())
+						if (placa.charAt(0) == ss.charAt(0) && ("FRIDAY".equals(fecha.getDayOfWeek().name())
 								|| "SUNDAY".equals(fecha.getDayOfWeek().name())))
 							return true;
 
@@ -111,14 +112,20 @@ public class BussinesLogicImpl implements BusinessLogic {
 	}
 
 	@Override
-	public int cantidadLimiteVehiculos(int tipoVehiculo) {
-		String descripcion="";
-		if(tipoVehiculo==0)descripcion="autos";
-		else {
-			descripcion="motos";
+	public int obtenerConfisysCantidadLimiteVehiculos(int tipoVehiculo) {
+		try {
+			String descripcion = "";
+
+			if (tipoVehiculo == 0)
+				descripcion = "autos";
+			else {
+				descripcion = "motos";
+			}
+
+			return Integer.parseInt(confisysRepository.findByDescripcion(descripcion).getValor());
+		} catch (Exception e) {
+			throw new VigilanteExcepcion("Error al consultar el congisys para cantidad e vehiculos." + e.getMessage());
 		}
-		
-		return Integer.parseInt(confisysRepository.findByDescripcion(descripcion).getValor());
 	}
 
 	@Override
@@ -164,6 +171,11 @@ public class BussinesLogicImpl implements BusinessLogic {
 			throw new VigilanteExcepcion("Excepcion al actualizar el archivo properties. " + e.getMessage());
 		}
 
+	}
+
+	@Override
+	public String obtenerConfisysRestriccionPlaca() {
+		return confisysRepository.findByDescripcion(RESTRICCION_PLACA).getValor();
 	}
 
 }

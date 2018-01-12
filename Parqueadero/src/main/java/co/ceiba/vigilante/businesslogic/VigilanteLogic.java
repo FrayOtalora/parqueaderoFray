@@ -2,7 +2,7 @@ package co.ceiba.vigilante.businesslogic;
 
 import java.util.Date;
 
-public interface BusinessLogic {
+public interface VigilanteLogic {
 
 	boolean restriccionIngreso(String placa);
 
@@ -10,10 +10,12 @@ public interface BusinessLogic {
 
 	float obtenerValorPagar(long horas, int tipoVehiculo, int cilindraje);
 
-	int cantidadLimiteVehiculos(int tipoVehiculo);
+	int obtenerConfisysCantidadLimiteVehiculos(int tipoVehiculo);
 
 	String obtenerPropertiesByName(String name);
 
 	void actualizarPropertiesByName(String nombre, String valor);
 
+	String obtenerConfisysRestriccionPlaca();
+	
 }

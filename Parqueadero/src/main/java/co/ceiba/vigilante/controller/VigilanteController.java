@@ -30,9 +30,9 @@ public class VigilanteController {
 		return vigilanteService.retirarVehiculo(placa); 
 	}
 
-//	@RequestMapping(value = "/registrarPagoVehiculo", method = RequestMethod.POST)
-//	public void registrarPagoVehiculo(@RequestBody Parking parking) {
-//
-//	}
+	@RequestMapping(value = "/registrarPagoVehiculo", method = RequestMethod.POST)
+	public void registrarPagoVehiculo(@RequestBody Parking parking) {
+		vigilanteService.registrarPagoVehiculo(parking);
+	}
 
 }

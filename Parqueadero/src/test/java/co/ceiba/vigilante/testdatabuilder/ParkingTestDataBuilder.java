@@ -11,7 +11,7 @@ public class ParkingTestDataBuilder {
 	private int tipoVehiculo;
 	private int cilindraje;
 	private Date fechaIngreso;
-	private Date fechaRetiro;
+	private Date fechaSalida;
 	private float valorPago;
 
 	public ParkingTestDataBuilder() {
@@ -19,6 +19,12 @@ public class ParkingTestDataBuilder {
 		this.placa = "123456";
 		this.tipoVehiculo = 0;
 		this.cilindraje = 0;
+		
+	}
+	
+	public ParkingTestDataBuilder withId(int id) {
+		this.id=id;
+		return this;
 	}
 
 	public ParkingTestDataBuilder withPlaca(String placa) {
@@ -35,9 +41,25 @@ public class ParkingTestDataBuilder {
 		this.tipoVehiculo = tipoVehiculo;
 		return this;
 	}
-
+	
+	public ParkingTestDataBuilder withFechaSalida(Date fechaSalida) {
+		this.fechaSalida=fechaSalida;
+		return this;
+	}
+	
+	public ParkingTestDataBuilder withValorPago(float valor) {
+		this.valorPago=valor;
+		return this;
+	}
+	
+	public ParkingTestDataBuilder withFechaIngreso(Date fechaIngreso) {
+		this.fechaIngreso=fechaIngreso;
+		return this;
+	}
+	
+	
 	public Parking build() {
-		return new Parking(placa, tipoVehiculo, cilindraje);
+		return new Parking(id, placa, tipoVehiculo, cilindraje, fechaIngreso, fechaSalida, valorPago);
 	}
 
 }

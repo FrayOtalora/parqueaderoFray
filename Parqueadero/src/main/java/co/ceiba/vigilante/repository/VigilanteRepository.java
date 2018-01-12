@@ -11,5 +11,6 @@ public interface VigilanteRepository extends CrudRepository<Parking, Long>{
 	@Query("select p from parking p where p.placa=?1 and p.fechaSalida IS NULL")
 	Parking findByPlacaAndFechaSalida(String placa);
 
+
 	
 }

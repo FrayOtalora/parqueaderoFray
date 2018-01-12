@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Before;
@@ -17,17 +18,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import co.ceiba.vigilante.businesslogic.BusinessLogic;
+import co.ceiba.vigilante.businesslogic.VigilanteLogic;
 import co.ceiba.vigilante.dominio.Parking;
 import co.ceiba.vigilante.excepcion.VigilanteExcepcion;
 import co.ceiba.vigilante.testdatabuilder.ParkingTestDataBuilder;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class BusinessLogicTest {
+public class VigilanteLogicTest {
 
 	@Autowired
-	BusinessLogic businessLogic;
+	VigilanteLogic businessLogic;
 
 	static final String AUTOS="autos";
 	static final String MOTOS="motos";
@@ -52,9 +53,8 @@ public class BusinessLogicTest {
 
 	@Test
 	public void placaNoNulaConRestriccion() {
-
 		parking = new ParkingTestDataBuilder().withPlaca("A123456").build();
-
+		
 		assertTrue(businessLogic.restriccionIngreso(parking.getPlaca()));
 	}
 
