@@ -19,28 +19,21 @@ import co.ceiba.vigilante.repository.ConfisysRepository;
 public class VigilanteLogicImpl implements VigilanteLogic {
 
 	static final String PARQUEADERO_PROPERTIES = "parqueadero.properties";
-	static final String RESTRICCION_PLACA="restriccionPlaca";
+	static final String RESTRICCION_PLACA = "restriccionPlaca";
 
 	@Autowired
 	ConfisysRepository confisysRepository;
 
 	@Override
 	public boolean restriccionIngreso(String placa) {
-
 		try {
 			if (!placa.isEmpty()) {
 				LocalDateTime fecha = LocalDateTime.now();
-				String[] letras = this.obtenerConfisysRestriccionPlaca().split("-");
-				if (letras.length > 0) {
-					for (String ss : letras) {
-						return(placa.charAt(0) == ss.charAt(0) && ("MONDAY".equals(fecha.getDayOfWeek().name())
-								|| "SUNDAY".equals(fecha.getDayOfWeek().name())));
-					}
-				}
-				
+				String letra = this.obtenerConfisysRestriccionPlaca();
+				return (placa.charAt(0) == letra.charAt(0) && ("MONDAY".equals(fecha.getDayOfWeek().name())
+						|| "SUNDAY".equals(fecha.getDayOfWeek().name())));
+
 			}
-			
-			
 
 			throw new VigilanteExcepcion("La placa llego vacia");
 
@@ -79,25 +72,14 @@ public class VigilanteLogicImpl implements VigilanteLogic {
 		while (hayHoras) {
 
 			if (horas <= 9) {
-				if (tipoVehiculo == 0)
-					valor += horas * 1000;
-				else {
-					valor += horas * 500;
-				}
+				valor += (tipoVehiculo == 0) ? horas * 1000 : horas * 500;
+
 				hayHoras = false;
 			} else if (horas > 9 && horas <= 24) {
-				if (tipoVehiculo == 0) {
-					valor += 8000;
-				} else {
-					valor += 4000;
-				}
+				valor += (tipoVehiculo == 0) ? 8000 : 4000;
 				hayHoras = false;
 			} else {
-				if (tipoVehiculo == 0)
-					valor += 8000;
-				else {
-					valor += 4000;
-				}
+				valor += (tipoVehiculo == 0) ? 8000 : 4000;
 				horas -= 24;
 			}
 
