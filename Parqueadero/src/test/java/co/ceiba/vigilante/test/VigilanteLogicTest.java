@@ -19,8 +19,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import co.ceiba.vigilante.businesslogic.VigilanteLogic;
+import co.ceiba.vigilante.dominio.Confisys;
 import co.ceiba.vigilante.dominio.Parking;
 import co.ceiba.vigilante.excepcion.VigilanteExcepcion;
+import co.ceiba.vigilante.repository.ConfisysRepository;
 import co.ceiba.vigilante.testdatabuilder.ParkingTestDataBuilder;
 
 @SpringBootTest
@@ -30,37 +32,54 @@ public class VigilanteLogicTest {
 	@Autowired
 	VigilanteLogic businessLogic;
 
-	static final String AUTOS="autos";
-	static final String MOTOS="motos";
-	
+	static final String AUTOS = "autos";
+	static final String MOTOS = "motos";
+	static final String MONDAY = "MONDAY";
+	static final String SUNDAY = "SUNDAY";
+
 	private LocalDateTime fechaIngreso;
 	private LocalDateTime fechaSalida;
 	private Parking parking;
 
+	@Autowired
+	ConfisysRepository confisysRepository;
+	
+	Confisys confisys;
+	
 	@Before
 	public void setUp() {
 		fechaIngreso = LocalDateTime.now();
 		fechaSalida = LocalDateTime.now();
 		parking = new ParkingTestDataBuilder().build();
 	}
+	
+	@Test
+	public void inicializarBD() {
+		confisys = new Confisys("restriccionPlaca", "A");
+		confisysRepository.save(confisys);
+	}
 
 	// Pruebas para metodo restriccionIngreso
 
-	@Test (expected = VigilanteExcepcion.class)
+	@Test(expected = VigilanteExcepcion.class)
 	public void placaNula() {
 		businessLogic.restriccionIngreso("");
 	}
 
 	@Test
 	public void placaNoNulaConRestriccion() {
-		parking = new ParkingTestDataBuilder().withPlaca("A123456").build();
-		
-		assertTrue(businessLogic.restriccionIngreso(parking.getPlaca()));
+		if (LocalDateTime.now().getDayOfWeek().name().equals(MONDAY)
+				|| LocalDateTime.now().getDayOfWeek().name().equals(SUNDAY)) {
+			parking = new ParkingTestDataBuilder().withPlaca("A123456").build();
+
+			assertTrue(businessLogic.restriccionIngreso(parking.getPlaca()));
+		}
 	}
 
 	@Test
 	public void placaNoNulaSinRestriction() {
 		assertFalse(businessLogic.restriccionIngreso(parking.getPlaca()));
+
 	}
 
 	// Pruebas obtener diferencia horas
@@ -134,19 +153,22 @@ public class VigilanteLogicTest {
 	@Test
 	public void valorPagarAuto7Horas() {
 
-		assertEquals(7000.0f, businessLogic.obtenerValorPagar(7, parking.getTipoVehiculo(), parking.getCilindraje()), 0.0f);
+		assertEquals(7000.0f, businessLogic.obtenerValorPagar(7, parking.getTipoVehiculo(), parking.getCilindraje()),
+				0.0f);
 	}
 
 	@Test
 	public void valorPagarAuto13Horas() {
 
-		assertEquals(8000.0f, businessLogic.obtenerValorPagar(13, parking.getTipoVehiculo(), parking.getCilindraje()), 0.0f);
+		assertEquals(8000.0f, businessLogic.obtenerValorPagar(13, parking.getTipoVehiculo(), parking.getCilindraje()),
+				0.0f);
 	}
 
 	@Test
 	public void valorPagarAuto28Horas() {
 
-		assertEquals(12000.0f, businessLogic.obtenerValorPagar(28, parking.getTipoVehiculo(), parking.getCilindraje()), 0.0f);
+		assertEquals(12000.0f, businessLogic.obtenerValorPagar(28, parking.getTipoVehiculo(), parking.getCilindraje()),
+				0.0f);
 	}
 
 	@Test
@@ -154,7 +176,8 @@ public class VigilanteLogicTest {
 
 		parking = new ParkingTestDataBuilder().withTipoVehiculo(1).build();
 
-		assertEquals(3500.0f, businessLogic.obtenerValorPagar(7, parking.getTipoVehiculo(), parking.getCilindraje()), 0.0f);
+		assertEquals(3500.0f, businessLogic.obtenerValorPagar(7, parking.getTipoVehiculo(), parking.getCilindraje()),
+				0.0f);
 	}
 
 	@Test
@@ -162,7 +185,8 @@ public class VigilanteLogicTest {
 
 		parking = new ParkingTestDataBuilder().withTipoVehiculo(1).build();
 
-		assertEquals(4000.0f, businessLogic.obtenerValorPagar(13, parking.getTipoVehiculo(), parking.getCilindraje()), 0.0f);
+		assertEquals(4000.0f, businessLogic.obtenerValorPagar(13, parking.getTipoVehiculo(), parking.getCilindraje()),
+				0.0f);
 	}
 
 	@Test
@@ -170,7 +194,8 @@ public class VigilanteLogicTest {
 
 		parking = new ParkingTestDataBuilder().withTipoVehiculo(1).build();
 
-		assertEquals(6000.0f, businessLogic.obtenerValorPagar(28, parking.getTipoVehiculo(), parking.getCilindraje()), 0.0f);
+		assertEquals(6000.0f, businessLogic.obtenerValorPagar(28, parking.getTipoVehiculo(), parking.getCilindraje()),
+				0.0f);
 	}
 
 	@Test
@@ -178,7 +203,8 @@ public class VigilanteLogicTest {
 
 		parking = new ParkingTestDataBuilder().withTipoVehiculo(1).withCilindraje(600).build();
 
-		assertEquals(5500.0f, businessLogic.obtenerValorPagar(7, parking.getTipoVehiculo(), parking.getCilindraje()), 0.0f);
+		assertEquals(5500.0f, businessLogic.obtenerValorPagar(7, parking.getTipoVehiculo(), parking.getCilindraje()),
+				0.0f);
 	}
 
 	@Test
@@ -186,7 +212,8 @@ public class VigilanteLogicTest {
 
 		parking = new ParkingTestDataBuilder().withTipoVehiculo(1).withCilindraje(600).build();
 
-		assertEquals(6000.0f, businessLogic.obtenerValorPagar(13, parking.getTipoVehiculo(), parking.getCilindraje()), 0.0f);
+		assertEquals(6000.0f, businessLogic.obtenerValorPagar(13, parking.getTipoVehiculo(), parking.getCilindraje()),
+				0.0f);
 	}
 
 	@Test
@@ -194,56 +221,51 @@ public class VigilanteLogicTest {
 
 		parking = new ParkingTestDataBuilder().withTipoVehiculo(1).withCilindraje(600).build();
 
-		assertEquals(8000.0f, businessLogic.obtenerValorPagar(28, parking.getTipoVehiculo(), parking.getCilindraje()), 0.0f);
+		assertEquals(8000.0f, businessLogic.obtenerValorPagar(28, parking.getTipoVehiculo(), parking.getCilindraje()),
+				0.0f);
 	}
 
 	// Test obtenerPropertiesByName
 
-	@Test (expected = VigilanteExcepcion.class)
+	@Test(expected = VigilanteExcepcion.class)
 	public void obtenerPropertiesByNameParametroNull() {
 		businessLogic.obtenerPropertiesByName("");
 
 	}
-	
-	@Test (expected = VigilanteExcepcion.class)
+
+	@Test(expected = VigilanteExcepcion.class)
 	public void obtenerPropertiesByNameNoExiste() {
 		businessLogic.obtenerPropertiesByName("xxxx");
 	}
-	
+
 	@Test
 	public void obtenerPropertiesByNameAutos() {
 		assertNotNull(businessLogic.obtenerPropertiesByName(AUTOS));
 	}
-	
+
 	@Test
 	public void obtenerPropertiesByNameMotos() {
 		assertNotNull(businessLogic.obtenerPropertiesByName(MOTOS));
 	}
-	
-	
-	@Test (expected = VigilanteExcepcion.class)
-	public void actualizarPropertiesByNameVacioValorOK() {
-		businessLogic.actualizarPropertiesByName("", "5" );
-	}
-	
 
-	@Test (expected = VigilanteExcepcion.class)
-	public void actualizarPropertiesByNameOKValorVacio() {
-		businessLogic.actualizarPropertiesByName(AUTOS, "" );
+	@Test(expected = VigilanteExcepcion.class)
+	public void actualizarPropertiesByNameVacioValorOK() {
+		businessLogic.actualizarPropertiesByName("", "5");
 	}
-	
+
+	@Test(expected = VigilanteExcepcion.class)
+	public void actualizarPropertiesByNameOKValorVacio() {
+		businessLogic.actualizarPropertiesByName(AUTOS, "");
+	}
+
 	@Test
 	public void actualizarPropertiesByNameOKValorOK() {
-		businessLogic.actualizarPropertiesByName(MOTOS, "7" );
+		businessLogic.actualizarPropertiesByName(MOTOS, "7");
 	}
-	
-	@Test (expected = VigilanteExcepcion.class)
-	public void actualizarPropertiesByNameNoexisteValorOK() {
-		businessLogic.actualizarPropertiesByName("xxxx", "7" );
-	}
-	
-	
 
-	
+	@Test(expected = VigilanteExcepcion.class)
+	public void actualizarPropertiesByNameNoexisteValorOK() {
+		businessLogic.actualizarPropertiesByName("xxxx", "7");
+	}
 
 }
