@@ -56,6 +56,7 @@ public class VigilanteLogicTest {
 	@Test
 	public void inicializarBD() {
 		confisys = new Confisys("restriccionPlaca", "A");
+		if(confisysRepository.findByDescripcion(confisys.getDescripcion())==null) 
 		confisysRepository.save(confisys);
 	}
 

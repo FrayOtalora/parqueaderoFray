@@ -47,12 +47,17 @@ public class ServiceImplTest {
 
 	@Test
 	public void inicia() {
+		
+		
 		confisys = new Confisys("motos", "10");
-		confisysRepository.save(confisys);
+		if(confisysRepository.findByDescripcion(confisys.getDescripcion())==null) 
+			confisysRepository.save(confisys);
 		confisys = new Confisys("autos", "20");
-		confisysRepository.save(confisys);
+		if(confisysRepository.findByDescripcion(confisys.getDescripcion())==null) 
+			confisysRepository.save(confisys);		
 		confisys = new Confisys("restriccionPlaca", "A");
-		confisysRepository.save(confisys);
+		if(confisysRepository.findByDescripcion(confisys.getDescripcion())==null) 
+			confisysRepository.save(confisys);
 		vigilanteRepository.save(parkingRetiro);
 		vigilanteRepository.save(parkingPago);
 
