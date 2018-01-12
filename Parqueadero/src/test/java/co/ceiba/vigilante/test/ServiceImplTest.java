@@ -81,13 +81,17 @@ public class ServiceImplTest {
 
 	@Test (expected= VigilanteExcepcion.class)
 	public void ingresarVehiculDiferente() {
-		parkingIngreso = new ParkingTestDataBuilder().withPlaca("55555").withTipoVehiculo(11111).build();
+		parkingIngreso.setPlaca("55555");
+		parkingIngreso.setTipoVehiculo(11111);
 		vigilanteService.ingresarVehiculo(parkingIngreso);
 	}
 	
 	@Test
 	public void ingresarVehiculoMotoMayor500() {
 		parkingIngreso = new ParkingTestDataBuilder().withPlaca("7777").withTipoVehiculo(1).withCilindraje(700).build();
+		parkingIngreso.setPlaca("7777");
+		parkingIngreso.setTipoVehiculo(1);
+		parkingIngreso.setCilindraje(710);
 		vigilanteService.ingresarVehiculo(parkingIngreso);
 	}
 

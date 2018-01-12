@@ -87,7 +87,14 @@ public class VigilanteServiceImpl implements VigilanteService {
 			if (parking == null)
 				throw new VigilanteExcepcion("El objeto ingresa vacio");
 
-			String nombreProperties = (parking.getTipoVehiculo() == 0) ? "autos" : "motos";
+			String nombreProperties = "";
+
+			if (parking.getTipoVehiculo() == 0)
+				nombreProperties = "autos";
+
+			else if (parking.getTipoVehiculo() == 1){
+				nombreProperties = "motos";
+			}
 
 			int cantidadVehiculos = Integer.parseInt(businessLogic.obtenerPropertiesByName(nombreProperties));
 

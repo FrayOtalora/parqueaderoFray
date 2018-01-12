@@ -32,12 +32,7 @@ public class Parking implements Serializable {
 	public Parking() {
 
 	}
-	
-	public Parking(String placa, int tipoVehiculo, int cilindraje) {
-		this.placa=placa;
-		this.tipoVehiculo=tipoVehiculo;
-		this.cilindraje=cilindraje;
-	}
+
 
 	public Parking(int id, String placa, int tipoVehiculo, int cilindraje, Date fechaIngreso, Date fechaSalida, float valorPago) {
 		this.id = id;
