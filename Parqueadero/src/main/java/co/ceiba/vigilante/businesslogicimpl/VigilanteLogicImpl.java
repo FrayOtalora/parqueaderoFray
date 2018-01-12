@@ -33,16 +33,14 @@ public class VigilanteLogicImpl implements VigilanteLogic {
 				String[] letras = this.obtenerConfisysRestriccionPlaca().split("-");
 				if (letras.length > 0) {
 					for (String ss : letras) {
-						if (placa.charAt(0) == ss.charAt(0) && ("FRIDAY".equals(fecha.getDayOfWeek().name())
-								|| "SUNDAY".equals(fecha.getDayOfWeek().name())))
-							return true;
-
-						else {
-							return false;
-						}
+						return(placa.charAt(0) == ss.charAt(0) && ("MONDAY".equals(fecha.getDayOfWeek().name())
+								|| "SUNDAY".equals(fecha.getDayOfWeek().name())));
 					}
 				}
+				
 			}
+			
+			
 
 			throw new VigilanteExcepcion("La placa llego vacia");
 
